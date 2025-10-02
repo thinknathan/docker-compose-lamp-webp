@@ -46,7 +46,7 @@ RUN pecl install redis-5.3.7 && \
 
 # Install imagick
 RUN apt-get update && \
-    apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && \
+    apt-get -y --no-install-recommends install --fix-missing libmagickwand-dev && apt-get -y install --fix-missing libwebp-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Workarround until imagick is available in pecl with php8 support
@@ -59,7 +59,7 @@ RUN cd /usr/local/src && \
     cd imagick && \
     git checkout ${IMAGICK_COMMIT} && \
     phpize && \
-    ./configure && \
+    ./configure --with-webp=yes && \
     make && \
     make install && \
     cd .. && \
@@ -87,7 +87,7 @@ RUN apt-get -y update && \
 libjpeg62-turbo-dev \
 libpng-dev && \
     rm -rf /var/lib/apt/lists/* && \
-    docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg && \
+    docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp && \
     docker-php-ext-install gd
 
 # Insure an SSL directory exists
